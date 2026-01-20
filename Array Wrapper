@@ -1,0 +1,22 @@
+class ArrayWrapper {
+  constructor(nums) {
+    // Store the array inside the object
+    this.nums = nums;
+  }
+
+  // This runs when we use + with the object
+  valueOf() {
+    let sum = 0;
+
+    for (let num of this.nums) {
+      sum += num;
+    }
+
+    return sum;
+  }
+
+  // This runs when we convert the object to a string
+  toString() {
+    return "[" + this.nums.join(",") + "]";
+  }
+}
