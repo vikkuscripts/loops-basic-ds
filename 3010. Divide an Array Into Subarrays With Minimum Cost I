@@ -1,0 +1,18 @@
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var minimumCost = function minimumCost(nums) {
+    const n = nums.length;
+    
+    let firstCost = nums[0];
+    let minSecond = nums[1];
+    let ans = Infinity;
+
+    for (let j = 2; j < n; j++) {
+        ans = Math.min(ans, firstCost + minSecond + nums[j]);
+        minSecond = Math.min(minSecond, nums[j]);
+    }
+
+    return ans;
+}
