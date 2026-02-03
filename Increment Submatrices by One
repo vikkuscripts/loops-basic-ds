@@ -1,0 +1,29 @@
+/**
+ * @param {number} n
+ * @param {number[][]} queries
+ * @return {number[][]}
+ */
+var rangeAddQueries = function (n, queries) {
+    // Step 1: Create n x n matrix filled with 0
+    let mat = [];
+    for (let i = 0; i < n; i++) {
+        mat.push(new Array(n).fill(0));
+    }
+
+    for (let q = 0; q < queries.length; q++) {
+        let row1 = queries[q][0];
+        let col1 = queries[q][1];
+        let row2 = queries[q][2];
+        let col2 = queries[q][3];
+
+        // Step 3: Add 1 to the submatrix
+        for (let i = row1; i <= row2; i++) {
+            for (let j = col1; j <= col2; j++) {
+                mat[i][j] += 1;
+            }
+        }
+    }
+
+    // Step 4: Return the final matrix
+    return mat;
+};
