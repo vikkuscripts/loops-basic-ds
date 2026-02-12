@@ -1,0 +1,39 @@
+Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same.
+
+Consider the number of unique elements in nums to be k​​​​​​​​​​​​​​. After removing duplicates, return the number of unique elements k.
+
+The first k elements of nums should contain the unique numbers in sorted order. The remaining elements beyond index k - 1 can be ignored.
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+function removeDuplicates(nums) {
+    // Edge case: empty array
+    if (nums.length === 0) return 0;
+    
+    // k tracks the position for the next unique element
+    let k = 1;
+    
+    // Start from index 1 and compare with previous element
+    for (let i = 1; i < nums.length; i++) {
+        // If current element is different from previous, it's unique
+        if (nums[i] !== nums[i - 1]) {
+            nums[k] = nums[i];
+            k++;
+        }
+    }
+    
+    return k;
+}
+
+// Example usage:
+const nums1 = [1, 1, 2];
+const k1 = removeDuplicates(nums1);
+console.log(k1); // Output: 2
+console.log(nums1.slice(0, k1)); // Output: [1, 2]
+
+const nums2 = [0, 0, 1, 1, 1, 2, 2, 3, 3, 4];
+const k2 = removeDuplicates(nums2);
+console.log(k2); // Output: 5
+console.log(nums2.slice(0, k2)); // Output: [0, 1, 2, 3, 4]
