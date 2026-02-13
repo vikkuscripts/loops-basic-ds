@@ -1,0 +1,27 @@
+Given two strings needle and haystack, return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+
+
+
+/**
+ * @param {string} haystack
+ * @param {string} needle
+ * @return {number}
+ */
+function strStr(haystack, needle) {
+  if (needle === '') return 0;
+  if (needle.length > haystack.length) return -1;
+  
+  for (let i = 0; i <= haystack.length - needle.length; i++) {
+    let j = 0;
+    // Compare characters one by one
+    while (j < needle.length && haystack[i + j] === needle[j]) {
+      j++;
+    }
+    // If we matched all characters in needle
+    if (j === needle.length) {
+      return i;
+    }
+  }
+  
+  return -1;
+}
