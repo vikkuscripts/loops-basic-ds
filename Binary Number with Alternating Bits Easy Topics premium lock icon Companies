@@ -1,0 +1,77 @@
+Given a positive integer, check whether it has alternating bits: namely, if two adjacent bits will always have different values.
+
+/**
+ * @param {number} n - Positive integer
+ * @return {boolean} - True if has alternating bits, false otherwise
+ */
+function hasAlternatingBits(n) {
+    // Get the last bit
+    let prevBit = n & 1;
+    n >>= 1;
+    
+    // Check each subsequent bit
+    while (n > 0) {
+        let currBit = n & 1;
+        
+        // If current bit equals previous bit, not alternating
+        if (currBit === prevBit) {
+            return false;
+        }
+        
+        prevBit = currBit;
+        n >>= 1;
+    }
+    
+    return true;
+}
+
+// Alternative Solution 1: XOR approach
+function hasAlternatingBitsXOR(n) {
+    // XOR with right-shifted version
+    // If alternating: 101 ^ 010 = 111 (all 1s)
+    const xor = n ^ (n >> 1);
+    
+    // Check if xor is all 1s: xor & (xor + 1) should be 0
+    // Example: 111 & 1000 = 0
+    return (xor & (xor + 1)) === 0;
+}
+
+// Alternative Solution 2: Using string
+function hasAlternatingBitsString(n) {
+    const binary = n.toString(2);
+    
+    for (let i = 1; i < binary.length; i++) {
+        if (binary[i] === binary[i - 1]) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+// Alternative Solution 3: Using regex
+function hasAlternatingBitsRegex(n) {
+    const binary = n.toString(2);
+    // Match strings that are only alternating 01 or 10
+    return /^(10)+$|^(01)+1?$/.test(binary);
+}
+
+// Test examples
+console.log(hasAlternatingBits(5));    // true  (binary: 101)
+console.log(hasAlternatingBits(7));    // false (binary: 111)
+console.log(hasAlternatingBits(11));   // false (binary: 1011)
+console.log(hasAlternatingBits(10));   // true  (binary: 1010)
+console.log(hasAlternatingBits(21));   // true  (binary: 10101)
+console.log(hasAlternatingBits(4));    // false (binary: 100)
+
+// Test all solutions
+console.log("\nTesting all solutions:");
+const testCases = [5, 7, 11, 10, 21, 4, 1, 2, 3];
+testCases.forEach(n => {
+    console.log(`n=${n} (${n.toString(2)}):`, 
+        hasAlternatingBits(n),
+        hasAlternatingBitsXOR(n),
+        hasAlternatingBitsString(n),
+        hasAlternatingBitsRegex(n)
+    );
+});
