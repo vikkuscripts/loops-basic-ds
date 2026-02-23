@@ -1,0 +1,20 @@
+
+Given a binary string s and an integer k, return true if every binary code of length k is a substring of s. Otherwise, return false.
+
+
+/**
+ * @param {string} s
+ * @param {number} k
+ * @return {boolean}
+ */
+var hasAllCodes = function(s, k) {
+    const needed = 1 << k; // Total unique codes = 2^k
+    const seen = new Set();
+
+    for (let i = 0; i <= s.length - k; i++) {
+        seen.add(s.substring(i, i + k));
+        if (seen.size === needed) return true; // Early exit
+    }
+
+    return false;
+};
