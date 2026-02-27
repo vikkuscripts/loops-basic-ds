@@ -1,0 +1,77 @@
+You are given a binary string s, and an integer k.
+
+In one operation, you must choose exactly k different indices and flip each '0' to '1' and each '1' to '0'.
+
+Return the minimum number of operations required to make all characters in the string equal to '1'. If it is not possible, return -1.
+
+
+function minOperations(s, k) {
+    const n = s.length;
+
+    // Use two sets (for even and odd counts) to track unvisited states
+    const sets = [new Set(), new Set()];
+    for (let i = 0; i <= n; i++) {
+        sets[i % 2].add(i);
+    }
+
+    // Count number of '0's
+    let cnt0 = 0;
+    for (const char of s) {
+        if (char === '0') cnt0++;
+    }
+
+    // If already all ones
+    if (cnt0 === 0) return 0;
+
+    // Remove initial state from its parity group
+    sets[cnt0 % 2].delete(cnt0);
+
+    // BFS setup
+    let queue = [cnt0];
+    let steps = 0;
+
+    while (queue.length > 0) {
+        const nextQueue = [];
+        steps++;
+
+        for (const cur of queue) {
+            // Determine bounds on how many zeros we can reduce
+            // We choose x zeros to flip (from 0 to min(cur, k))
+            // Then we flip (k - x) ones → becomes zeros
+            // New zero count = cur - x + (k - x) = cur + k - 2x
+            // x ∈ [max(0, k - (n - cur)), min(k, cur)]
+            const minx = Math.max(0, k - (n - cur)); // enough ones to flip
+            const maxx = Math.min(k, cur);           // enough zeros to flip
+
+            if (minx > maxx) continue;
+
+            // The new zero count will be in range [cur + k - 2*maxx, cur + k - 2*minx]
+            const l = cur + k - 2 * maxx;
+            const r = cur + k - 2 * minx;
+
+            const parity = l % 2;
+            const set = sets[parity];
+
+            // Iterate through all values in set within [l, r]
+            // Since JS Set doesn't support range queries, we do manual check
+            // But to avoid O(n), we can pre-store and remove as we go
+            const toRemove = [];
+            for (const val of set) {
+                if (val >= l && val <= r) {
+                    if (val === 0) return steps;
+                    toRemove.push(val);
+                    nextQueue.push(val);
+                }
+            }
+
+            // Remove processed values
+            for (const val of toRemove) {
+                set.delete(val);
+            }
+        }
+
+        queue = nextQueue;
+    }
+
+    return -1;
+}   
