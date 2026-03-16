@@ -1,0 +1,50 @@
+Get Biggest Three Rhombus Sums in a Grid
+
+You are given an m x n integer matrix grid​​​.
+
+A rhombus sum is the sum of the elements that form the border of a regular rhombus shape in grid​​​.
+The rhombus must have the shape of a square rotated 45 degrees with each of the corners centered in a grid cell. 
+Below is an image of four valid rhombus shapes with the corresponding colored cells that should be included in each rhombus sum:
+
+
+
+
+/**
+ * @param {number[][]} grid
+ * @return {number[]}
+ */
+function getBiggestRhombusSum(grid) {
+  const m = grid.length;
+  const n = grid.length;
+  let maxSum = -Infinity;
+
+  // Try every center (i, j)
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      // Try every possible radius k (distance from center to corner)
+      let k = 0;
+      while (true) {
+        let sum = 0;
+        let valid = false;
+
+        // Check all cells at Manhattan distance == k from (i, j)
+        for (let x = 0; x < m; x++) {
+          for (let y = 0; y < n; y++) {
+            if (Math.abs(x - i) + Math.abs(y - j) === k) {
+              sum += grid[x] [y];
+              valid = true;
+            }
+          }
+        }
+
+        // If no cells at this radius, break
+        if (!valid) break;
+
+        maxSum = Math.max(maxSum, sum);
+        k++;
+      }
+    }
+  }
+
+  return maxSum;
+}
