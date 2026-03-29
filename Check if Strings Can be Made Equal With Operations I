@@ -1,0 +1,54 @@
+You are given two strings s1 and s2, both of length 4, consisting of lowercase English letters.
+
+You can apply the following operation on any of the two strings any number of times:
+
+Choose any two indices i and j such that j - i = 2, then swap the two characters at those indices in the string.
+Return true if you can make the strings s1 and s2 equal, and false otherwise.
+
+/**
+ * @param {string} s1
+ * @param {string} s2
+ * @return {boolean}
+ */
+function canBeEqual(s1, s2) {
+    // If strings are already equal, return true
+    if (s1 === s2) return true;
+    
+    // Convert strings to arrays for easier manipulation
+    let arr1 = s1.split('');
+    let arr2 = s2.split('');
+    
+    // Generate all possible strings reachable from s1
+    const reachable = new Set();
+    const queue = [arr1.join('')];
+    reachable.add(arr1.join(''));
+    
+    while (queue.length > 0) {
+        const current = queue.shift();
+        const arr = current.split('');
+        
+        // Try all possible swaps where j - i = 2
+        for (let i = 0; i < arr.length - 2; i++) {
+            const j = i + 2;
+            // Swap characters at positions i and j
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+            const newStr = arr.join('');
+            
+            if (newStr === s2) return true;
+            
+            if (!reachable.has(newStr)) {
+                reachable.add(newStr);
+                queue.push(newStr);
+            }
+            
+            // Swap back for next iteration
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+    }
+    
+    return false;
+}
+
+// Test cases
+console.log(canBeEqual("abcd", "cdab")); // true
+console.log(canBeEqual("abcd", "dacb")); // false
